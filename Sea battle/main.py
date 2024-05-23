@@ -98,12 +98,8 @@ def add_to_all(event): # ф-я для определения координат 
 
 def generate_enemy_ships(): # функция, которая генерирует корабли противника
     enemy_ships = []  
-    ships_list = []
-    # генерируем список случайных длин кораблей
-    for i in range(0, ships):
-        ships_list.append(random.choice([ship_len1, ship_len2, ship_len3]))
+    ships_list = [4,3,3,2,2,2,1,1,1,1]
     # print(ships_list)
-
     # подсчёт суммарной длины кораблей
     sum_1_all_ships = sum(ships_list)
     sum_1_enemy = 0
@@ -136,7 +132,8 @@ def generate_enemy_ships(): # функция, которая генерируе�
                                                enemy_ships[primerno_y + 1][primerno_x + j + 1] + \
                                                enemy_ships[primerno_y - 1][primerno_x + j + 1] + \
                                                enemy_ships[primerno_y + 1][primerno_x + j] + \
-                                               enemy_ships[primerno_y - 1][primerno_x + j]
+                                               enemy_ships[primerno_y - 1][primerno_x + j] + \
+                                               enemy_ships[primerno_y + 1][primerno_x - 1] + enemy_ships[primerno_y - 1][primerno_x - 1] + enemy_ships[primerno_y - 1][primerno_x + 1] ##
                             # print(check_near_ships)
                             if check_near_ships == 0:  # записываем в том случае, если нет ничего рядом
                                 enemy_ships[primerno_y][primerno_x + j] = i + 1  # записываем номер корабля
@@ -153,7 +150,8 @@ def generate_enemy_ships(): # функция, которая генерируе�
                                                enemy_ships[primerno_y + j + 1][primerno_x + 1] + \
                                                enemy_ships[primerno_y + j + 1][primerno_x - 1] + \
                                                enemy_ships[primerno_y + j][primerno_x + 1] + \
-                                               enemy_ships[primerno_y + j][primerno_x - 1]
+                                               enemy_ships[primerno_y + j][primerno_x - 1] + \
+                                               enemy_ships[primerno_y + 1][primerno_x - 1] + enemy_ships[primerno_y - 1][primerno_x - 1] + enemy_ships[primerno_y - 1][primerno_x + 1] ## 
                             # print(check_near_ships)
                             if check_near_ships == 0:  # записываем в том случае, если нет ничего рядом
                                 enemy_ships[primerno_y + j][primerno_x] = i + 1  # записываем номер корабля
@@ -165,12 +163,12 @@ def generate_enemy_ships(): # функция, которая генерируе�
         for i in range(0, s_x):
             for j in range(0, s_y):
                 if enemy_ships[j][i] > 0:
-                    sum_1_enemy = sum_1_enemy + 1
+                    sum_1_enemy += 1
 
         # print(sum_1_enemy)
         # print(ships_list)
         # print(enemy_ships)
-        return enemy_ships
+    return enemy_ships
 
 tk = Tk() # создание окна
 app_running = True # чтоб узнать, работает ли приложение
@@ -224,10 +222,7 @@ b2.place(x = size_canvas_x + 20, y = 120)
 canvas.bind_all("<Button-1>", add_to_all) # ЛКМ
 canvas.bind_all("<Button-3>", add_to_all) # ПКМ
 
-ships = s_x // 2 # определяем max кол-во кораблей
-ship_len1 = s_x // 5 # длина корабля 1 типа
-ship_len2 = s_x // 3 # длина корабля 2 типа
-ship_len3 = s_x // 2 # длина корабля 3 типа
+ships = 10 # определяем max кол-во кораблей
 enemy_ships_1 = [[0 for i in range(s_y + 1)] for i in range(s_x + 1)] # корабли 1 игрока
 enemy_ships_2 = [[0 for i in range(s_y + 1)] for i in range(s_x + 1)] # корабли 2 игрока
 #print(enemy_ships)
