@@ -8,6 +8,7 @@ def on_closing():
     if messagebox.askokcancel("Выход из игры", "Хотите выйти из игры?"): # окно выхода из игры
         app_running = False
         tk.destroy()
+
 # функция, которая создает поле
 def draw_table(offset_x = 0): # offset_x - смещение по x
     for i in range(0, s_x + 1):
@@ -15,7 +16,8 @@ def draw_table(offset_x = 0): # offset_x - смещение по x
     for i in range(0, s_y + 1):
         canvas.create_line(offset_x, step_y * i,offset_x + size_canvas_x, step_y * i)
 
-def button_show_enemy_1(): # функция, которая показывает корабли противника
+# функция, которая показывает корабли игрока 1
+def button_show_enemy_1(): 
     for i in range(0, s_x):
         for j in range(0, s_y):
             if enemy_ships_1[j][i] > 0:
@@ -25,7 +27,8 @@ def button_show_enemy_1(): # функция, которая показывает
                 _id = canvas.create_rectangle(step_x * i, step_y * j, step_x * i + step_x, step_y * j + step_y, fill = color)
                 list_ids.append(_id)
 
-def button_show_enemy_2(): # функция, которая показывает корабли противника
+# функция, которая показывает корабли игрока 2
+def button_show_enemy_2(): 
     for i in range(0, s_x):
         for j in range(0, s_y):
             if enemy_ships_2[j][i] > 0:
@@ -35,7 +38,8 @@ def button_show_enemy_2(): # функция, которая показывает
                 _id = canvas.create_rectangle((size_canvas_x + menu_x) + step_x * i, step_y * j,(size_canvas_x + menu_x) + step_x * i + step_x, step_y * j + step_y, fill = color)
                 list_ids.append(_id)
 
-def button_restart(): # функция для кнопки Начать заново (очищает поле от кораблей)
+# функция для кнопки Начать заново (очищает поле от кораблей)
+def button_restart(): 
     global list_ids
     global cleaked_positions_1, cleaked_positions_2
     global enemy_ships_1, enemy_ships_2
@@ -47,7 +51,8 @@ def button_restart(): # функция для кнопки Начать зано
     cleaked_positions_1 = [[-1 for i in range(s_x)] for i in range(s_y)]
     cleaked_positions_2 = [[-1 for i in range(s_x)] for i in range(s_y)]
 
-def draw_point(x, y): # функция для отрисовки точки или крестика
+# функция для отрисовки точки или крестика на поле 1-го игрока
+def draw_point(x, y): 
     # print(enemy_ships[y][x])
     if enemy_ships_1[y][x] == 0: # отрисовка круга при промахе
         color = 'black'
@@ -71,7 +76,7 @@ def check_winner(): # функция для проверки победы
                     win = False
     return win
 def add_to_all(event): # ф-я для определения координат клика мышки
-    global cleaked_positions_1
+    global cleaked_positions_1, cleaked_positions_2
     _type = 0 # ЛКМ # переменная для хранения произведённого нажатия
     if event.num == 3:
         _type = 1 # ПКМ
@@ -83,7 +88,7 @@ def add_to_all(event): # ф-я для определения координат 
     # координаты ячейки
     cell_x = mouse_x // step_x
     cell_y = mouse_y // step_y
-    # print(cell_x, cell_y, "type: ", _type)
+    print(cell_x, cell_y, "type: ", _type)
     # проверка на выход за границы поля
     if cell_x < s_x and cell_y < s_y:
         if cleaked_positions_1[cell_y][cell_x] == -1:
@@ -94,7 +99,18 @@ def add_to_all(event): # ф-я для определения координат 
                 print("Вы выиграли!")
                 cleaked_positions_1 = [[10 for i in range(s_x)] for i in range(s_y)]
         # print(len(list_ids))
-
+    
+    # для поля 2го игрока 
+    if cell_x >= s_x + delta_menu_x and cell_y < s_x + delta_menu_x + s_x and cell_y < s_y:
+        #print("ok")
+        if cleaked_positions_2[cell_y][cell_x - (s_x + delta_menu_x)] == -1:
+            cleaked_positions_2[cell_y][cell_x - (s_x + delta_menu_x)] = _type
+            draw_point2(cell_x - (s_x + delta_menu_x), cell_y) # вызываем ф-ю для отображения точки или крестика
+            # Проверка победы
+            if check_winner():
+                print("Вы выиграли!")
+                cleaked_positions_2 = [[10 for i in range(s_x)] for i in range(s_y)]
+        # print(len(list_ids))
 
 def generate_enemy_ships(): # функция, которая генерирует корабли противника
     enemy_ships = []  
@@ -170,6 +186,7 @@ def generate_enemy_ships(): # функция, которая генерируе�
         # print(enemy_ships)
     return enemy_ships
 
+
 tk = Tk() # создание окна
 app_running = True # чтоб узнать, работает ли приложение
 
@@ -183,8 +200,24 @@ step_y = size_canvas_y // s_y # шаг по вертикали
 size_canvas_x = step_x * s_x 
 size_canvas_y = step_y * s_y
 
-menu_x = step_x * 5 #250
+delta_menu_x = 5
+menu_x = step_x * delta_menu_x #250
 menu_y = 40
+
+def draw_point2(x, y, offset_x = size_canvas_x + menu_x): # функция для отрисовки точки или крестика на поле 1-го игрока
+    # print(enemy_ships[y][x])
+    if enemy_ships_2[y][x] == 0: # отрисовка круга при промахе
+        color = 'black'
+        id1 = canvas.create_oval(offset_x + step_x * x, step_y * y,offset_x + step_x * x + step_x, step_y * y + step_y, fill=color)
+        id2 = canvas.create_oval(offset_x + step_x * x + (step_x // 4), step_y * y + (step_y // 4),offset_x + step_x * x + step_x - (step_x // 4), step_y * y + step_y - (step_y // 4), fill= "gray")  
+        list_ids.append(id1) # добавляем круги в список
+        list_ids.append(id2) # чтоб они очищались
+    if enemy_ships_2[y][x] > 0: # отрисовка крестика при попадании
+        color = "blue"
+        id1 = canvas.create_rectangle(offset_x + step_x * x, step_y * y + (step_y // 2 - step_y // 10),offset_x + step_x * x + step_x, step_y * y + (step_y // 2 + step_y // 10), fill= color)
+        id2 = canvas.create_rectangle(offset_x + step_x * x + (step_x // 2 - step_x // 10), step_y * y,offset_x + step_x * x + (step_x // 2 + step_x // 10), step_y * y + step_y, fill= color)
+        list_ids.append(id1)
+        list_ids.append(id2)
 
 tk.protocol("WM_DELETE_WINDOW", on_closing)
 tk.title("Морской бой")
