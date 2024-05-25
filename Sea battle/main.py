@@ -88,28 +88,30 @@ def check_winner_player_2():
 
 # ф-я для определения координат клика мышки
 def add_to_all(event): 
-    global cleaked_positions_1, cleaked_positions_2
+    global cleaked_positions_1, cleaked_positions_2, move_playground_1
     _type = 0 # ЛКМ # переменная для хранения произведённого нажатия
     if event.num == 3:
         _type = 1 # ПКМ
     # print(_type)
-    # координаты игрового поля 
+    # координаты клика мышки 
     mouse_x = canvas.winfo_pointerx() - canvas.winfo_rootx() 
     mouse_y = canvas.winfo_pointery() - canvas.winfo_rooty() 
     # print(mouse_x, mouse_y)
     # координаты ячейки
     cell_x = mouse_x // step_x
     cell_y = mouse_y // step_y
-    print(cell_x, cell_y, "type: ", _type)
+    # print(cell_x, cell_y, "type: ", _type)
     # проверка на выход за границы поля
     # для поля 1-го игрока
-    if cell_x < s_x and cell_y < s_y:
+    if cell_x < s_x and cell_y < s_y and move_playground_1:
         if cleaked_positions_1[cell_y][cell_x] == -1:
             cleaked_positions_1[cell_y][cell_x] = _type
+            move_playground_1 = False
             draw_point(cell_x, cell_y) # вызываем ф-ю для отображения точки или крестика
             # Проверка победы
             if check_winner():
                 winner = "Победил Игрок № 2!"
+                move_playground_1 = True
                 print(winner)
                 cleaked_positions_1 = [[10 for i in range(s_x)] for i in range(s_y)]
                 cleaked_positions_2 = [[10 for i in range(s_x)] for i in range(s_y)]
@@ -121,13 +123,15 @@ def add_to_all(event):
         # print(len(list_ids))
     
     # для поля 2го игрока 
-    if cell_x >= s_x + delta_menu_x and cell_y < s_x + delta_menu_x + s_x and cell_y < s_y:
+    if cell_x >= s_x + delta_menu_x and cell_y < s_x + delta_menu_x + s_x and cell_y < s_y and not(move_playground_1):
         #print("ok")
         if cleaked_positions_2[cell_y][cell_x - (s_x + delta_menu_x)] == -1:
             cleaked_positions_2[cell_y][cell_x - (s_x + delta_menu_x)] = _type
+            move_playground_1 = True
             draw_point2(cell_x - (s_x + delta_menu_x), cell_y) # вызываем ф-ю для отображения точки или крестика
             # Проверка победы
             if check_winner_player_2():
+                move_playground_1 = False
                 winner = "Победил Игрок № 1!"
                 print(winner)
                 cleaked_positions_2 = [[10 for i in range(s_x)] for i in range(s_y)]
@@ -138,6 +142,7 @@ def add_to_all(event):
                 list_ids.append(id2)
         # print(len(list_ids))
 
+    mark_player(move_playground_1)
 def generate_enemy_ships(): # функция, которая генерирует корабли противника
     enemy_ships = []  
     ships_list = [4,3,3,2,2,2,1,1,1,1]
@@ -212,7 +217,6 @@ def generate_enemy_ships(): # функция, которая генерируе�
         # print(enemy_ships)
     return enemy_ships
 
-
 tk = Tk() # создание окна
 app_running = True # чтоб узнать, работает ли приложение
 
@@ -229,6 +233,10 @@ size_canvas_y = step_y * s_y
 delta_menu_x = 5
 menu_x = step_x * delta_menu_x #250
 menu_y = 40
+
+# move_playground_1 - если Истина, то ходит игрок № 2, иначе - игрок № 1
+move_playground_1 = False
+
 
 def draw_point2(x, y, offset_x = size_canvas_x + menu_x): # функция для отрисовки точки или крестика на поле 1-го игрока
     # print(enemy_ships[y][x])
@@ -263,10 +271,27 @@ t0 = Label(tk, text = "Игрок 1", font = ("Times New Roman", 16), fg = "blac
 t0.place(x = size_canvas_x // 2 - (t0.winfo_reqwidth() // 2), y = size_canvas_y + 3)
 t1 = Label(tk, text = "Игрок 2", font = ("Times New Roman", 16), fg = "black")
 t1.place(x = size_canvas_x + menu_x + size_canvas_x // 2 - (t1.winfo_reqwidth() // 2), y = size_canvas_y + 3)
+# Надписи: Ходит Игрок 1 и Ходит Игрок 2
+t3 = Label(tk, text = "$$$$$$", font = ("Times New Roman", 16), fg = "black")
+t3.place(x = size_canvas_x + step_x, y = 4 * step_y)
+
+def mark_player(player_mark_1):
+    if player_mark_1:
+        t0.configure(bg = 'red')
+        t1.configure(bg = "#f0f0f0")
+        t3.configure(text = "Ходит Игрок № 2")
+    else: 
+        t1.configure(bg = 'blue')
+        t0.configure(bg = "#f0f0f0")
+        t3.configure(text = "Ходит Игрок № 1")
+
+mark_player(move_playground_1)
 
 # Для определения: кто сейчас ходит
 t0.configure(bg = 'red')
 t0.configure(bg = '#f0f0f0')
+
+
 
 b0 = Button(tk, text = "Показать корабли Игрока 1", command = button_show_enemy_1)
 b0.place(x = size_canvas_x + 20, y = 30)
