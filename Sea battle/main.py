@@ -67,7 +67,8 @@ def draw_point(x, y):
         list_ids.append(id1)
         list_ids.append(id2)
 
-def check_winner(): # функция для проверки победы
+# функция для проверки победы
+def check_winner(): 
     win = True
     for i in range(0,s_x):
         for j in range(0, s_y):
@@ -75,7 +76,18 @@ def check_winner(): # функция для проверки победы
                 if cleaked_positions_1[j][i] == -1: # мы прокликали, то мы победили
                     win = False
     return win
-def add_to_all(event): # ф-я для определения координат клика мышки
+
+def check_winner_player_2(): 
+    win = True
+    for i in range(0,s_x):
+        for j in range(0, s_y):
+            if enemy_ships_2[j][i] > 0: # если для всех эл-в, где нах-ся вражеский корабль 
+                if cleaked_positions_2[j][i] == -1: # мы прокликали, то мы победили
+                    win = False
+    return win
+
+# ф-я для определения координат клика мышки
+def add_to_all(event): 
     global cleaked_positions_1, cleaked_positions_2
     _type = 0 # ЛКМ # переменная для хранения произведённого нажатия
     if event.num == 3:
@@ -90,14 +102,22 @@ def add_to_all(event): # ф-я для определения координат 
     cell_y = mouse_y // step_y
     print(cell_x, cell_y, "type: ", _type)
     # проверка на выход за границы поля
+    # для поля 1-го игрока
     if cell_x < s_x and cell_y < s_y:
         if cleaked_positions_1[cell_y][cell_x] == -1:
             cleaked_positions_1[cell_y][cell_x] = _type
             draw_point(cell_x, cell_y) # вызываем ф-ю для отображения точки или крестика
             # Проверка победы
             if check_winner():
-                print("Вы выиграли!")
+                winner = "Победил Игрок № 2!"
+                print(winner)
                 cleaked_positions_1 = [[10 for i in range(s_x)] for i in range(s_y)]
+                cleaked_positions_2 = [[10 for i in range(s_x)] for i in range(s_y)]
+                id1 = canvas.create_rectangle(step_x * 3 + (step_x // 2), step_y * 3 + (step_y // 2) - 15, (size_canvas_x + menu_x + size_canvas_x) - (step_x * 3) - (step_x // 3), size_canvas_y - step_y - (step_y // 2) + 15, fill = "cyan") # создаём прямоугольную область внутри окна
+                list_ids.append(id1)
+                id2 = canvas.create_text(step_x * 12 + step_x // 2, step_y * 6, text = winner, font = ("Times New Roman", 50), justify= "center")
+                list_ids.append(id2)
+
         # print(len(list_ids))
     
     # для поля 2го игрока 
@@ -107,9 +127,15 @@ def add_to_all(event): # ф-я для определения координат 
             cleaked_positions_2[cell_y][cell_x - (s_x + delta_menu_x)] = _type
             draw_point2(cell_x - (s_x + delta_menu_x), cell_y) # вызываем ф-ю для отображения точки или крестика
             # Проверка победы
-            if check_winner():
-                print("Вы выиграли!")
+            if check_winner_player_2():
+                winner = "Победил Игрок № 1!"
+                print(winner)
                 cleaked_positions_2 = [[10 for i in range(s_x)] for i in range(s_y)]
+                cleaked_positions_1 = [[10 for i in range(s_x)] for i in range(s_y)]
+                id1 = canvas.create_rectangle(step_x * 3 + (step_x // 2), step_y * 3 + (step_y // 2) - 15, (size_canvas_x + menu_x + size_canvas_x) - (step_x * 3) - (step_x // 3), size_canvas_y - step_y - (step_y // 2) + 15, fill = "cyan") # создаём прямоугольную область внутри окна
+                list_ids.append(id1)
+                id2 = canvas.create_text(step_x * 12 + step_x // 2, step_y * 6, text = winner, font = ("Times New Roman", 50), justify= "center")
+                list_ids.append(id2)
         # print(len(list_ids))
 
 def generate_enemy_ships(): # функция, которая генерирует корабли противника
