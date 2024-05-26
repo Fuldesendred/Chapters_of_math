@@ -27,7 +27,5 @@ if cell_x >= s_x + delta_menu_x and cell_y < s_x + delta_menu_x + s_x and cell_y
 ![image](https://github.com/Fuldesendred/Chapters_of_math/assets/146184468/59b862e1-21a6-49f3-a0cd-521fbea60738)
 ![image](https://github.com/Fuldesendred/Chapters_of_math/assets/146184468/e0765146-8912-40d5-9de5-e70f32d8efbd)
 ![image](https://github.com/Fuldesendred/Chapters_of_math/assets/146184468/d96f42b6-a48d-4a77-bbb1-e6e5d3220e0b)
-![image](https://github.com/Fuldesendred/Chapters_of_math/assets/146184468/074cf56e-9b7d-4fcb-8b90-e699313a316a)
-
 
 https://www.figma.com/file/dkcOFALjQLTQnfKKwauE77/%D0%9C%D0%BE%D1%80%D1%81%D0%BA%D0%BE%D0%B9-%D0%B1%D0%BE%D0%B9?type=design&node-id=0-1&mode=design&t=xFWYGN2Abye5dVOo-0   - ссылка на сырой проект на figma
