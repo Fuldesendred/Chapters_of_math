@@ -108,6 +108,9 @@ def add_to_all(event):
             cleaked_positions_1[cell_y][cell_x] = _type
             move_playground_1 = False
             draw_point(cell_x, cell_y) # вызываем ф-ю для отображения точки или крестика
+            # Проверка, попали ли в корабль
+            if enemy_ships_1[cell_y][cell_x] > 0:
+                move_playground_1 = True
             # Проверка победы
             if check_winner():
                 winner = "Победил Игрок № 2!"
@@ -129,6 +132,9 @@ def add_to_all(event):
             cleaked_positions_2[cell_y][cell_x - (s_x + delta_menu_x)] = _type
             move_playground_1 = True
             draw_point2(cell_x - (s_x + delta_menu_x), cell_y) # вызываем ф-ю для отображения точки или крестика
+            # Проверка, попали ли в корабль
+            if enemy_ships_2[cell_y][cell_x - (s_x + delta_menu_x)] > 0: # если попали в корабль игрока 2, то ход остаётся за игроком 1
+                move_playground_1 = False
             # Проверка победы
             if check_winner_player_2():
                 move_playground_1 = False
@@ -273,7 +279,7 @@ t1 = Label(tk, text = "Игрок 2", font = ("Times New Roman", 16), fg = "blac
 t1.place(x = size_canvas_x + menu_x + size_canvas_x // 2 - (t1.winfo_reqwidth() // 2), y = size_canvas_y + 3)
 # Надписи: Ходит Игрок 1 и Ходит Игрок 2
 t3 = Label(tk, text = "$$$$$$", font = ("Times New Roman", 16), fg = "black")
-t3.place(x = size_canvas_x + step_x, y = 4 * step_y)
+t3.place(x = size_canvas_x + step_x, y = 10 * step_y)
 
 def mark_player(player_mark_1):
     if player_mark_1:
@@ -287,20 +293,17 @@ def mark_player(player_mark_1):
 
 mark_player(move_playground_1)
 
-# Для определения: кто сейчас ходит
 t0.configure(bg = 'red')
 t0.configure(bg = '#f0f0f0')
 
-
-
 b0 = Button(tk, text = "Показать корабли Игрока 1", command = button_show_enemy_1)
-b0.place(x = size_canvas_x + 20, y = 30)
+b0.place(x = size_canvas_x + 35, y = 30)
 
 b1 = Button(tk, text = "Показать корабли Игрока 2", command = button_show_enemy_2)
-b1.place(x = size_canvas_x + 20, y = 80)
+b1.place(x = size_canvas_x + 35, y = 70)
 
 b2 = Button(tk, text = "Начать заново!", command = button_restart)
-b2.place(x = size_canvas_x + 20, y = 120)
+b2.place(x = size_canvas_x + 75, y = 110)
 
 # привязка событий к нажатию кнопок
 canvas.bind_all("<Button-1>", add_to_all) # ЛКМ
