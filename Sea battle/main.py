@@ -243,8 +243,8 @@ menu_y = 40
 # move_playground_1 - если Истина, то ходит игрок № 2, иначе - игрок № 1
 move_playground_1 = False
 
-
-def draw_point2(x, y, offset_x = size_canvas_x + menu_x): # функция для отрисовки точки или крестика на поле 1-го игрока
+# функция для отрисовки точки или крестика на поле 2-го игрока
+def draw_point2(x, y, offset_x = size_canvas_x + menu_x): 
     # print(enemy_ships[y][x])
     if enemy_ships_2[y][x] == 0: # отрисовка круга при промахе
         color = 'black'
@@ -278,7 +278,7 @@ t0.place(x = size_canvas_x // 2 - (t0.winfo_reqwidth() // 2), y = size_canvas_y 
 t1 = Label(tk, text = "Игрок 2", font = ("Times New Roman", 16), fg = "black")
 t1.place(x = size_canvas_x + menu_x + size_canvas_x // 2 - (t1.winfo_reqwidth() // 2), y = size_canvas_y + 3)
 # Надписи: Ходит Игрок 1 и Ходит Игрок 2
-t3 = Label(tk, text = "$$$$$$", font = ("Times New Roman", 16), fg = "black")
+t3 = Label(tk, text = "", font = ("Times New Roman", 16), fg = "black")
 t3.place(x = size_canvas_x + step_x, y = 10 * step_y)
 
 def mark_player(player_mark_1):
