@@ -85,17 +85,6 @@ def check_winner_player_2():
                 if cleaked_positions_2[j][i] == -1: # мы прокликали, то мы победили
                     win = False
     return win
-
-# функция для выстрела компьютера
-def vistrel_computer():
-    global cleaked_positions_1
-    cell_x = random.randint(0, s_x - 1)
-    cell_y = random.randint(0, s_y - 1)
-    while not(cleaked_positions_1[cell_y][cell_x] == -1):
-        cell_x = random.randint(0, s_x - 1)
-        cell_y = random.randint(0, s_y - 1)
-    cleaked_positions_1[cell_y][cell_x] = 7
-    draw_point(cell_x, cell_y)
     
 # функция для хода компьютера
 def hod_computer():
@@ -115,7 +104,6 @@ def hod_computer():
     if enemy_ships_1[cell_y][cell_x] > 0:
         move_playground_1 = True
         hod_computer()
-
     if check_winner():
         winner = "Победил Игрок № 2!" + add_to_label
         print(winner)
@@ -125,7 +113,6 @@ def hod_computer():
         list_ids.append(id1)
         id2 = canvas.create_text(step_x * 12 + step_x // 2, step_y * 6, text = winner, font = ("Times New Roman", 50), justify= "center")
         list_ids.append(id2)
-
 
 # ф-я для определения координат клика мышки
 def add_to_all(event): 
