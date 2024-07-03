@@ -86,6 +86,47 @@ def check_winner_player_2():
                     win = False
     return win
 
+# функция для выстрела компьютера
+def vistrel_computer():
+    global cleaked_positions_1
+    cell_x = random.randint(0, s_x - 1)
+    cell_y = random.randint(0, s_y - 1)
+    while not(cleaked_positions_1[cell_y][cell_x] == -1):
+        cell_x = random.randint(0, s_x - 1)
+        cell_y = random.randint(0, s_y - 1)
+    cleaked_positions_1[cell_y][cell_x] = 7
+    draw_point(cell_x, cell_y)
+    
+# функция для хода компьютера
+def hod_computer():
+    global cleaked_positions_1, cleaked_positions_2, move_playground_1, enemy_ships_1
+    tk.update()
+    time.sleep(1)
+    cell_x = random.randint(0, s_x - 1)
+    cell_y = random.randint(0, s_y - 1)
+    # будет кликать до тех пор, пока не попадёт в клетку
+    while not(cleaked_positions_1[cell_y][cell_x] == -1):
+        cell_x = random.randint(0, s_x - 1)
+        cell_y = random.randint(0, s_y - 1)
+    cleaked_positions_1[cell_y][cell_x] = 7
+    draw_point(cell_x, cell_y)
+    move_playground_1 = False
+    # если компьютер попал по кораблю, то он может выстрелить ещё раз
+    if enemy_ships_1[cell_y][cell_x] > 0:
+        move_playground_1 = True
+        hod_computer()
+
+    if check_winner():
+        winner = "Победил Игрок № 2!" + add_to_label
+        print(winner)
+        cleaked_positions_1 = [[10 for i in range(s_x)] for i in range(s_y)]
+        cleaked_positions_2 = [[10 for i in range(s_x)] for i in range(s_y)]
+        id1 = canvas.create_rectangle(step_x * 3 + (step_x // 2), step_y * 3 + (step_y // 2) - 15, (size_canvas_x + menu_x + size_canvas_x) - (step_x * 3) - (step_x // 3), size_canvas_y - step_y - (step_y // 2) + 15, fill = "cyan") # создаём прямоугольную область внутри окна
+        list_ids.append(id1)
+        id2 = canvas.create_text(step_x * 12 + step_x // 2, step_y * 6, text = winner, font = ("Times New Roman", 50), justify= "center")
+        list_ids.append(id2)
+
+
 # ф-я для определения координат клика мышки
 def add_to_all(event): 
     global cleaked_positions_1, cleaked_positions_2, move_playground_1
@@ -146,6 +187,9 @@ def add_to_all(event):
                 list_ids.append(id1)
                 id2 = canvas.create_text(step_x * 12 + step_x // 2, step_y * 6, text = winner, font = ("Times New Roman", 50), justify= "center")
                 list_ids.append(id2)
+            elif computer_vs_human:
+                mark_player(move_playground_1)
+                hod_computer()
         # print(len(list_ids))
 
     mark_player(move_playground_1)
@@ -213,8 +257,8 @@ def generate_enemy_ships(): # функция, которая генерируе�
 
         # делаем подсчет 1ц
         sum_1_enemy = 0
-        for i in range(0, s_x):
-            for j in range(0, s_y):
+        for i in range(0, 10):
+            for j in range(0, 10):
                 if enemy_ships[j][i] > 0:
                     sum_1_enemy += 1
 
@@ -242,6 +286,18 @@ menu_y = 40
 
 # move_playground_1 - если Истина, то ходит игрок № 2, иначе - игрок № 1
 move_playground_1 = False
+
+# Переменная для игры против компьютера
+# Если истина - то играем против компьютера
+computer_vs_human = True
+# 
+if computer_vs_human:
+    add_to_label = " (Компьютер)"
+    move_playground_1 = False 
+else: 
+    add_to_label = ""
+    move_playground_1 = False 
+
 
 # функция для отрисовки точки или крестика на поле 2-го игрока
 def draw_point2(x, y, offset_x = size_canvas_x + menu_x): 
@@ -274,22 +330,24 @@ draw_table(size_canvas_x + menu_x) # расчерчиваем линии для 
 
 # Надписи Игрок 1 и Игрок 2 делаем
 t0 = Label(tk, text = "Игрок 1", font = ("Times New Roman", 16), fg = "black")
-t0.place(x = size_canvas_x // 2 - (t0.winfo_reqwidth() // 2), y = size_canvas_y + 3)
-t1 = Label(tk, text = "Игрок 2", font = ("Times New Roman", 16), fg = "black")
-t1.place(x = size_canvas_x + menu_x + size_canvas_x // 2 - (t1.winfo_reqwidth() // 2), y = size_canvas_y + 3)
+t0.place(x = size_canvas_x // 2 - (t0.winfo_reqwidth() // 2), y = size_canvas_y + 5)
+t1 = Label(tk, text = "Игрок 2" + add_to_label, font = ("Times New Roman", 16), fg = "black")
+t1.place(x = size_canvas_x + menu_x + size_canvas_x // 2 - (t1.winfo_reqwidth() // 2), y = size_canvas_y + 5)
 # Надписи: Ходит Игрок 1 и Ходит Игрок 2
 t3 = Label(tk, text = "", font = ("Times New Roman", 16), fg = "black")
-t3.place(x = size_canvas_x + step_x, y = 10 * step_y)
+t3.place(x = size_canvas_x + 2.5*step_x - (t3.winfo_reqwidth() // 2), y = size_canvas_y + 5)
 
 def mark_player(player_mark_1):
     if player_mark_1:
         t0.configure(bg = 'red')
         t1.configure(bg = "#f0f0f0")
-        t3.configure(text = "Ходит Игрок № 2")
+        t3.configure(text = "Ходит Игрок № 2" + add_to_label)
+        t3.place(x = size_canvas_x + 2.5*step_x - (t3.winfo_reqwidth() // 2), y = size_canvas_y + 5)
     else: 
         t1.configure(bg = 'blue')
         t0.configure(bg = "#f0f0f0")
         t3.configure(text = "Ходит Игрок № 1")
+        t3.place(x = size_canvas_x + 2.5*step_x - (t3.winfo_reqwidth() // 2), y = size_canvas_y + 5)
 
 mark_player(move_playground_1)
 
