@@ -89,30 +89,34 @@ def check_winner_player_2():
 # функция для хода компьютера
 def hod_computer():
     global cleaked_positions_1, cleaked_positions_2, move_playground_1, enemy_ships_1
-    tk.update()
-    time.sleep(1)
-    cell_x = random.randint(0, s_x - 1)
-    cell_y = random.randint(0, s_y - 1)
-    # будет кликать до тех пор, пока не попадёт в клетку
-    while not(cleaked_positions_1[cell_y][cell_x] == -1):
+    if move_playground_1 == False:
+        pass
+    else:
+        tk.update()
+        time.sleep(1)
         cell_x = random.randint(0, s_x - 1)
         cell_y = random.randint(0, s_y - 1)
-    cleaked_positions_1[cell_y][cell_x] = 7
-    draw_point(cell_x, cell_y)
-    move_playground_1 = False
-    # если компьютер попал по кораблю, то он может выстрелить ещё раз
-    if enemy_ships_1[cell_y][cell_x] > 0:
-        move_playground_1 = True
-        hod_computer()
-    if check_winner():
-        winner = "Победил Игрок № 2!" + add_to_label
-        print(winner)
-        cleaked_positions_1 = [[10 for i in range(s_x)] for i in range(s_y)]
-        cleaked_positions_2 = [[10 for i in range(s_x)] for i in range(s_y)]
-        id1 = canvas.create_rectangle(step_x * 3 + (step_x // 2), step_y * 3 + (step_y // 2) - 15, (size_canvas_x + menu_x + size_canvas_x) - (step_x * 3) - (step_x // 3), size_canvas_y - step_y - (step_y // 2) + 15, fill = "cyan") # создаём прямоугольную область внутри окна
-        list_ids.append(id1)
-        id2 = canvas.create_text(step_x * 12 + step_x // 2, step_y * 6, text = winner, font = ("Times New Roman", 50), justify= "center")
-        list_ids.append(id2)
+        # будет кликать до тех пор, пока не попадёт в клетку
+        while not(cleaked_positions_1[cell_y][cell_x] == -1):
+            cell_x = random.randint(0, s_x - 1)
+            cell_y = random.randint(0, s_y - 1)
+        cleaked_positions_1[cell_y][cell_x] = 7
+        draw_point(cell_x, cell_y)
+        # если компьютер попал по кораблю, то он может выстрелить ещё раз
+        if enemy_ships_1[cell_y][cell_x] > 0:
+            move_playground_1 = True
+            hod_computer()
+        else:
+            move_playground_1 = False
+        if check_winner():
+            winner = "Победил Игрок № 2!" + add_to_label
+            print(winner)
+            cleaked_positions_1 = [[10 for i in range(s_x)] for i in range(s_y)]
+            cleaked_positions_2 = [[10 for i in range(s_x)] for i in range(s_y)]
+            id1 = canvas.create_rectangle(step_x * 3 + (step_x // 2) - 50, step_y * 3 + (step_y // 2) , (size_canvas_x + menu_x + size_canvas_x) - (step_x * 3) - (step_x // 3) + 50, size_canvas_y - step_y - (step_y // 2) , fill = "cyan") # создаём прямоугольную область внутри окна
+            list_ids.append(id1)
+            id2 = canvas.create_text(step_x * 12 + step_x // 2, step_y * 6, text = winner, font = ("Times New Roman", 48), justify= "center")
+            list_ids.append(id2)
 
 # ф-я для определения координат клика мышки
 def add_to_all(event): 
@@ -146,7 +150,7 @@ def add_to_all(event):
                 print(winner)
                 cleaked_positions_1 = [[10 for i in range(s_x)] for i in range(s_y)]
                 cleaked_positions_2 = [[10 for i in range(s_x)] for i in range(s_y)]
-                id1 = canvas.create_rectangle(step_x * 3 + (step_x // 2), step_y * 3 + (step_y // 2) - 15, (size_canvas_x + menu_x + size_canvas_x) - (step_x * 3) - (step_x // 3), size_canvas_y - step_y - (step_y // 2) + 15, fill = "cyan") # создаём прямоугольную область внутри окна
+                id1 = canvas.create_rectangle(step_x * 3 + (step_x // 2), step_y * 3 + (step_y // 2), (size_canvas_x + menu_x + size_canvas_x) - (step_x * 3) - (step_x // 3), size_canvas_y - step_y - (step_y // 2), fill = "cyan") # создаём прямоугольную область внутри окна
                 list_ids.append(id1)
                 id2 = canvas.create_text(step_x * 12 + step_x // 2, step_y * 6, text = winner, font = ("Times New Roman", 50), justify= "center")
                 list_ids.append(id2)
@@ -170,7 +174,7 @@ def add_to_all(event):
                 print(winner)
                 cleaked_positions_2 = [[10 for i in range(s_x)] for i in range(s_y)]
                 cleaked_positions_1 = [[10 for i in range(s_x)] for i in range(s_y)]
-                id1 = canvas.create_rectangle(step_x * 3 + (step_x // 2), step_y * 3 + (step_y // 2) - 15, (size_canvas_x + menu_x + size_canvas_x) - (step_x * 3) - (step_x // 3), size_canvas_y - step_y - (step_y // 2) + 15, fill = "cyan") # создаём прямоугольную область внутри окна
+                id1 = canvas.create_rectangle(step_x * 3 + (step_x // 2), step_y * 3 + (step_y // 2), (size_canvas_x + menu_x + size_canvas_x) - (step_x * 3) - (step_x // 3), size_canvas_y - step_y - (step_y // 2), fill = "cyan") # создаём прямоугольную область внутри окна
                 list_ids.append(id1)
                 id2 = canvas.create_text(step_x * 12 + step_x // 2, step_y * 6, text = winner, font = ("Times New Roman", 50), justify= "center")
                 list_ids.append(id2)
@@ -180,7 +184,9 @@ def add_to_all(event):
         # print(len(list_ids))
 
     mark_player(move_playground_1)
-def generate_enemy_ships(): # функция, которая генерирует корабли противника
+
+# функция, которая генерирует корабли противника
+def generate_enemy_ships(): 
     enemy_ships = []  
     ships_list = [4,3,3,2,2,2,1,1,1,1]
     # print(ships_list)
@@ -254,6 +260,16 @@ def generate_enemy_ships(): # функция, которая генерируе�
         # print(enemy_ships)
     return enemy_ships
 
+# 
+def change_rb():
+    global computer_vs_human, add_to_label
+    print(rb_var.get())
+    if rb_var.get():
+        computer_vs_human = True
+        add_to_label = " (Компьютер)"
+    else:
+        computer_vs_human = False
+        add_to_label = ""
 tk = Tk() # создание окна
 app_running = True # чтоб узнать, работает ли приложение
 
@@ -275,7 +291,7 @@ menu_y = 40
 move_playground_1 = False
 
 # Переменная для игры против компьютера
-# Если истина - то играем против компьютера
+# Если истина - то играем против компьютера, если нет, то против человека
 computer_vs_human = True
 # 
 if computer_vs_human:
@@ -324,15 +340,20 @@ t1.place(x = size_canvas_x + menu_x + size_canvas_x // 2 - (t1.winfo_reqwidth() 
 t3 = Label(tk, text = "", font = ("Times New Roman", 16), fg = "black")
 t3.place(x = size_canvas_x + 2.5*step_x - (t3.winfo_reqwidth() // 2), y = size_canvas_y + 5)
 
+# Ф-я для определения: кто ходит?
 def mark_player(player_mark_1):
     if player_mark_1:
         t0.configure(bg = 'red')
         t1.configure(bg = "#f0f0f0")
+        t1.configure(text= "Игрок 2" + add_to_label)
+        t1.place(x = size_canvas_x + menu_x + size_canvas_x // 2 - (t1.winfo_reqwidth() // 2), y = size_canvas_y + 5)
         t3.configure(text = "Ходит Игрок № 2" + add_to_label)
         t3.place(x = size_canvas_x + 2.5*step_x - (t3.winfo_reqwidth() // 2), y = size_canvas_y + 5)
     else: 
         t1.configure(bg = 'blue')
         t0.configure(bg = "#f0f0f0")
+        t1.configure(text= "Игрок 2" + add_to_label)
+        t1.place(x = size_canvas_x + menu_x + size_canvas_x // 2 - (t1.winfo_reqwidth() // 2), y = size_canvas_y + 5)
         t3.configure(text = "Ходит Игрок № 1")
         t3.place(x = size_canvas_x + 2.5*step_x - (t3.winfo_reqwidth() // 2), y = size_canvas_y + 5)
 
@@ -341,14 +362,23 @@ mark_player(move_playground_1)
 t0.configure(bg = 'red')
 t0.configure(bg = '#f0f0f0')
 
-b0 = Button(tk, text = "Показать корабли Игрока 1", command = button_show_enemy_1)
-b0.place(x = size_canvas_x + 35, y = 30)
+b0 = Button(tk, text = "Показать корабли Игрока 1", command = button_show_enemy_1, font= ("Times New Roman", 12), fg = "black")
+b0.place(x = size_canvas_x + 35, y = 10)
 
-b1 = Button(tk, text = "Показать корабли Игрока 2", command = button_show_enemy_2)
-b1.place(x = size_canvas_x + 35, y = 70)
+b1 = Button(tk, text = "Показать корабли Игрока 2", command = button_show_enemy_2, font= ("Times New Roman", 12), fg = "black")
+b1.place(x = size_canvas_x + 35, y = 50)
 
-b2 = Button(tk, text = "Начать заново!", command = button_restart)
-b2.place(x = size_canvas_x + 75, y = 110)
+b2 = Button(tk, text = "Начать заново!", command = button_restart, font= ("Times New Roman", 12), fg = "black")
+b2.place(x = size_canvas_x + 75, y = 90)
+
+# Добавление радио-кнопок для переключения режима игры (компьютер - человек, человек - человек)
+rb_var = BooleanVar()
+rb1 = Radiobutton(tk, text = "Человек vs Компьютер", variable = rb_var, value=1, command=change_rb, font=("Times New Roman", 12), fg="black")
+rb2 = Radiobutton(tk, text = "Человек vs Человек", variable  = rb_var, value=0, command=change_rb, font=("Times New Roman", 12), fg="black")
+rb1.place(x = size_canvas_x + 35, y = 125)
+rb2.place(x = size_canvas_x + 35, y = 145)
+if computer_vs_human:
+    rb1.select()
 
 # привязка событий к нажатию кнопок
 canvas.bind_all("<Button-1>", add_to_all) # ЛКМ
